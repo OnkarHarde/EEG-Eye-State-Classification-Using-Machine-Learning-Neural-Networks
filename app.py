@@ -24,7 +24,7 @@ st.set_page_config(
     layout="wide"
 )
 
-DATA_PATH = "data/EEG_Eye_State.csv"
+DATA_PATH = "data/EEG_Eye_State_Classification.csv"
 MODEL_DIR = "models"
 RF_MODEL_PATH = f"{MODEL_DIR}/rf_model.pkl"
 NN_MODEL_PATH = f"{MODEL_DIR}/nn_model.h5"
