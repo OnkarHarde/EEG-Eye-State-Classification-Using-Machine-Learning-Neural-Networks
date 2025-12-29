@@ -32,17 +32,34 @@ SCALER_PATH = f"{MODEL_DIR}/scaler.pkl"
 
 os.makedirs(MODEL_DIR, exist_ok=True)
 
-# ------------------- LOAD DATA -------------------
+# ================= DATA LOADING (FIXED) =================
+
+st.sidebar.header("Dataset")
+
+uploaded_file = st.sidebar.file_uploader(
+    "Upload EEG Eye State CSV",
+    type=["csv"]
+)
+
 @st.cache_data
-def load_data():
-    return pd.read_csv(DATA_PATH)
+def load_data_from_path(path):
+    return pd.read_csv(path)
 
-df = load_data()
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
+else:
+    if not os.path.exists(DATA_PATH):
+        st.error(
+            f"Dataset not found at `{DATA_PATH}`.\n\n"
+            "Please upload the dataset using the sidebar."
+        )
+        st.stop()
+    df = load_data_from_path(DATA_PATH)
 
+# ------------------- DATA PREP -------------------
 X = df.drop("eyeDetection", axis=1)
 y = df["eyeDetection"]
 
-# ------------------- PREPROCESS -------------------
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
